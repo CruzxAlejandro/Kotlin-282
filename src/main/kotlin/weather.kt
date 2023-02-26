@@ -47,25 +47,31 @@ fun main(){
         if (userChoice == 1) {
 
             //menu
-            println(" ".repeat(61) + "${"All records in Spokane"}" + " ".repeat(61))
+            println(" ".repeat(61) + "All records in Spokane" + " ".repeat(61))
             println("")
             printHeader(firstLineArray)
             printAllRecords(weatherDB)
         }
         else if (userChoice == 2) {
             print("Please enter a month (1-12) to print: ")
-            var userMonth = readLine()!!.toInt()
-            println(" ".repeat(50) + "${"Records for a single month in Spokane"}" + " ".repeat(50))
+            var userMonth = readln().toInt()
+            println(" ".repeat(50) + "Records for a single month in Spokane" + " ".repeat(50))
             println("")
             printHeader(firstLineArray)
             printOneMonthRecord(weatherDB, userMonth)
         }
         else if (userChoice == 3) {
 
-            println(" ".repeat(50) + "${"Highest recorded temperature in Spokane"}" + " ".repeat(50))
+            println(" ".repeat(50) + "Highest recorded temperature in Spokane" + " ".repeat(50))
             println("")
             printHeader(firstLineArray)
             printHighestRecordTemp(weatherDB)
+        }
+        else if (userChoice ==4) {
+            println(" ".repeat(50) + "Lowest recorded temperature in Spokane" + " ".repeat(50))
+            println("")
+            printHeader(firstLineArray)
+            printLowestRecordTemp(weatherDB)
         }
     }
 
@@ -87,7 +93,7 @@ fun menu() : Int {
     println("8. Quit \n")
     print("Please select an option: ")
 
-return readLine()!!.toInt()
+return readln().toInt()
 
 }
 
@@ -124,10 +130,25 @@ fun printHighestRecordTemp(weatherDB: MutableMap<String, Weather>) {
     }
 }
 
+fun printLowestRecordTemp(weatherDB: MutableMap<String, Weather>) {
+    var listOfRecLow = mutableListOf<Int>()
+    for((key, weatherRecord) in weatherDB) {
+        listOfRecLow +=  weatherRecord.recLo.toInt()
+    }
+
+    var numMinArray = listOfRecLow.min()
+    for ((key, weatherRecord) in weatherDB) {
+        if (weatherRecord.recLo == numMinArray) {
+            println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12) )
+        }
+    }
+
+}
+
 
 fun printHeader(firstLineArray: MutableList<String>) {
     return println("${firstLineArray[0]}".padStart(12) + " ${firstLineArray[1]}".padStart(12) + " ${firstLineArray[2]}".padStart(12) + " ${firstLineArray[3]}".padStart(12) + " ${firstLineArray[4]}".padStart(12) + " ${firstLineArray[5]}".padStart(12) + " ${firstLineArray[6]}".padStart(12) + " ${firstLineArray[7]}".padStart(12) + " ${firstLineArray[8]}".padStart(12) + " ${firstLineArray[9]}".padStart(12) + " ${firstLineArray[10]}".padStart(12) + " ${firstLineArray[11]}".padStart(12) +
-            "\n" +"${" " + "-".repeat(11)}".repeat(12)
+            "\n" + (" " + "-".repeat(11)).repeat(12)
     )
 }
 
