@@ -46,40 +46,95 @@ fun main(){
             println("")
             printHeader(firstLineArray)
             printAllRecords(weatherDB)
+            println("")
         }
         else if (userChoice == 2) {
             print("Please enter a month (1-12) to print: ")
             var userMonth = readln().toInt()
-            println(" ".repeat(50) + "Records for a single month in Spokane" + " ".repeat(50))
+            var printSpecificMonth = ""
+
+            when(userMonth){
+                1 -> printSpecificMonth = "January"
+                2 -> printSpecificMonth = "February"
+                3 -> printSpecificMonth = "March"
+                4 -> printSpecificMonth = "April"
+                5 -> printSpecificMonth = "May"
+                6 -> printSpecificMonth = "June"
+                7 -> printSpecificMonth = "July"
+                8 -> printSpecificMonth = "August"
+                9 -> printSpecificMonth = "September"
+                10 -> printSpecificMonth = "October"
+                11 -> printSpecificMonth = "November"
+                12 -> printSpecificMonth = "December"
+                else -> println("Error: Please enter a valid month (1-12)")
+            }
+            println(" ".repeat(50) + "All records in Spokane for the month of ${printSpecificMonth}" + " ".repeat(50))
             println("")
             printHeader(firstLineArray)
             printOneMonthRecord(weatherDB, userMonth)
+            println("")
         }
         else if (userChoice == 3) {
             println(" ".repeat(50) + "Highest recorded temperature in Spokane" + " ".repeat(50))
             println("")
             printHeader(firstLineArray)
             printHighestRecordTemp(weatherDB)
+            println("")
         }
         else if (userChoice == 4) {
             println(" ".repeat(50) + "Lowest recorded temperature in Spokane" + " ".repeat(50))
             println("")
             printHeader(firstLineArray)
             printLowestRecordTemp(weatherDB)
+            println("")
         }
         else if (userChoice == 5){
             print("Please enter a month (1-12) to print: ")
             var userMonth = readln().toInt()
-            println("Add conditional statement that prints specific month")
-            println(" ".repeat(50) + "Highest recorded temperature in Spokane for a single month" + " ".repeat(50))
+            var printSpecificMonth = ""
+            when(userMonth){
+                1 -> printSpecificMonth = "January"
+                2 -> printSpecificMonth = "February"
+                3 -> printSpecificMonth = "March"
+                4 -> printSpecificMonth = "April"
+                5 -> printSpecificMonth = "May"
+                6 -> printSpecificMonth = "June"
+                7 -> printSpecificMonth = "July"
+                8 -> printSpecificMonth = "August"
+                9 -> printSpecificMonth = "September"
+                10 -> printSpecificMonth = "October"
+                11 -> printSpecificMonth = "November"
+                12 -> printSpecificMonth = "December"
+                else -> println("Error: Please enter a valid month (1-12)")
+            }
+
+            println(" ".repeat(50) + "Highest recorded temperature in Spokane for the month of ${printSpecificMonth}" + " ".repeat(50))
             println("")
             printHeader(firstLineArray)
             printRecordHighOneMonth(weatherDB, userMonth)
+            println("")
         }
         else if (userChoice == 6){
             print("Please enter a month (1-12) to print: ")
             var userMonth = readln().toInt()
-            println(" ".repeat(50) + "Lowest recorded temperature in Spokane for a single month" + " ".repeat(50))
+            var printSpecificMonth = ""
+
+            when(userMonth){
+                1 -> printSpecificMonth = "January"
+                2 -> printSpecificMonth = "February"
+                3 -> printSpecificMonth = "March"
+                4 -> printSpecificMonth = "April"
+                5 -> printSpecificMonth = "May"
+                6 -> printSpecificMonth = "June"
+                7 -> printSpecificMonth = "July"
+                8 -> printSpecificMonth = "August"
+                9 -> printSpecificMonth = "September"
+                10 -> printSpecificMonth = "October"
+                11 -> printSpecificMonth = "November"
+                12 -> printSpecificMonth = "December"
+                else -> println("Error: Please enter a valid month (1-12)")
+            }
+            println(" ".repeat(50) + "Lowest recorded temperature in Spokane for the month of ${printSpecificMonth}" + " ".repeat(50))
             println("")
             printHeader(firstLineArray)
             printRecordLowOneMonth(weatherDB, userMonth)
@@ -91,8 +146,12 @@ fun main(){
             printAveragePrecip(weatherDB, userMonth)
             println("")
         }
+        else if (userChoice == 8) {
+            println("Quitting program")
+        }
         else {
             println("Please enter a valid option (1-7)")
+            println("")
         }
     }
 }
@@ -130,12 +189,12 @@ fun printOneMonthRecord(weatherDB: MutableMap<String, Weather>, month: Int) {
 }
 
 fun printHighestRecordTemp(weatherDB: MutableMap<String, Weather>) {
-    var ArrayOfRecHi = mutableListOf<Int>()
+    var arrayOfRecHi = mutableListOf<Int>()
     for((key, weatherRecord) in weatherDB) {
-        ArrayOfRecHi +=  weatherRecord.recHi
+        arrayOfRecHi +=  weatherRecord.recHi
     }
 
-    var numMaxArray = ArrayOfRecHi.max()
+    var numMaxArray = arrayOfRecHi.max()
     for ((key, weatherRecord) in weatherDB) {
         if (weatherRecord.recHi == numMaxArray) {
             println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12) )
@@ -217,7 +276,7 @@ fun printAveragePrecip(weatherDB: MutableMap<String, Weather>, month: Int) {
         else -> println("Error: Please enter a valid month (1-12)")
     }
 
-    println(" ".repeat(35) + "Average Precipitation for the month of ${userMonthChoice} is: ${avgPrecipForMonth} inches. Or ${roundedAvg} inches rounded." + " ".repeat(35))
+    println(" ".repeat(35) + "Average Precipitation for the month of ${userMonthChoice} is ${avgPrecipForMonth} inches or ${roundedAvg} inches rounded." + " ".repeat(35))
 }
 
 fun printHeader(firstLineArray: MutableList<String>) {
