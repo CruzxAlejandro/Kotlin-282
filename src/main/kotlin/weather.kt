@@ -1,3 +1,4 @@
+package weatherdbKotlin
 import java.io.File
 /************************************************************
  *  Name:         Alex Cruz
@@ -14,7 +15,7 @@ fun main(){
 
     val weatherDB: MutableMap<String, Weather> = mutableMapOf()
     var firstLineArray = mutableListOf<String>()
-    var arrayOfRecHi = mutableListOf<Int>()
+
 
     var lines = File(weatherDBFile).readLines()
 //    println(lines)
@@ -30,14 +31,10 @@ fun main(){
             var crumbs = line.split(",")
             var weatherRecord = Weather( crumbs[0].toInt(), crumbs[1].toInt(), crumbs[2], crumbs[3], crumbs[4].toInt(), crumbs[5].toInt(), crumbs[6].toInt(), crumbs[7].toInt(), crumbs[8].toInt(), crumbs[9].toInt(), crumbs[10].toInt(), crumbs[11].toDouble())
             weatherDB["${crumbs[0]} / ${crumbs[1]}"] = weatherRecord
-            arrayOfRecHi += crumbs[7].toInt()
         }
     }
-//\
 
-//    println(arrayOfRecHi)
-//    arrayOfRecHi.sort()
-//    println(arrayOfRecHi.max())
+
 
 
 // read database file and stores into hashmap
@@ -45,8 +42,6 @@ fun main(){
     while(userChoice != 8) {
         userChoice = menu()
         if (userChoice == 1) {
-
-            //menu
             println(" ".repeat(61) + "All records in Spokane" + " ".repeat(61))
             println("")
             printHeader(firstLineArray)
@@ -61,25 +56,46 @@ fun main(){
             printOneMonthRecord(weatherDB, userMonth)
         }
         else if (userChoice == 3) {
-
             println(" ".repeat(50) + "Highest recorded temperature in Spokane" + " ".repeat(50))
             println("")
             printHeader(firstLineArray)
             printHighestRecordTemp(weatherDB)
         }
-        else if (userChoice ==4) {
+        else if (userChoice == 4) {
             println(" ".repeat(50) + "Lowest recorded temperature in Spokane" + " ".repeat(50))
             println("")
             printHeader(firstLineArray)
             printLowestRecordTemp(weatherDB)
         }
+        else if (userChoice == 5){
+            print("Please enter a month (1-12) to print: ")
+            var userMonth = readln().toInt()
+            println("Add conditional statement that prints specific month")
+            println(" ".repeat(50) + "Highest recorded temperature in Spokane for a single month" + " ".repeat(50))
+            println("")
+            printHeader(firstLineArray)
+            printRecordHighOneMonth(weatherDB, userMonth)
+        }
+        else if (userChoice == 6){
+            print("Please enter a month (1-12) to print: ")
+            var userMonth = readln().toInt()
+            println(" ".repeat(50) + "Lowest recorded temperature in Spokane for a single month" + " ".repeat(50))
+            println("")
+            printHeader(firstLineArray)
+            printRecordLowOneMonth(weatherDB, userMonth)
+        }
+        else if (userChoice == 7){
+            print("Please enter a month (1-12) to print: ")
+            var userMonth = readln().toInt()
+            println("")
+            printAveragePrecip(weatherDB, userMonth)
+            println("")
+        }
+        else {
+            println("Please enter a valid option (1-7)")
+        }
     }
-
-
-
 }
-
-// function that contains menu options
 
 fun menu() : Int {
     println("1. Print ALL Records")
@@ -98,9 +114,7 @@ return readln().toInt()
 }
 
 fun printAllRecords(weatherDB: MutableMap<String, Weather>) {
-
     for ((key, weatherRecord) in weatherDB) {
-//        println("${key} : ${weatherRecord}")
         weatherRecord.month.toString()
         weatherRecord.day.toString()
         println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12) )
@@ -109,7 +123,6 @@ fun printAllRecords(weatherDB: MutableMap<String, Weather>) {
 
 fun printOneMonthRecord(weatherDB: MutableMap<String, Weather>, month: Int) {
     for ((key, weatherRecord) in weatherDB) {
-        // this works, but it takes a look at the value instead of the key
         if ( weatherRecord.month == month) {
             println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12) )
         }
@@ -117,50 +130,97 @@ fun printOneMonthRecord(weatherDB: MutableMap<String, Weather>, month: Int) {
 }
 
 fun printHighestRecordTemp(weatherDB: MutableMap<String, Weather>) {
-    var listOfRecHi = mutableListOf<Int>()
+    var ArrayOfRecHi = mutableListOf<Int>()
     for((key, weatherRecord) in weatherDB) {
-        listOfRecHi +=  weatherRecord.recHi.toInt()
+        ArrayOfRecHi +=  weatherRecord.recHi
     }
 
-    var numMaxArray = listOfRecHi.max()
+    var numMaxArray = ArrayOfRecHi.max()
     for ((key, weatherRecord) in weatherDB) {
-    if (weatherRecord.recHi == numMaxArray) {
-        println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12) )
-    }
+        if (weatherRecord.recHi == numMaxArray) {
+            println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12) )
+        }
     }
 }
 
 fun printLowestRecordTemp(weatherDB: MutableMap<String, Weather>) {
-    var listOfRecLow = mutableListOf<Int>()
+    var arrayOfRecLow = mutableListOf<Int>()
     for((key, weatherRecord) in weatherDB) {
-        listOfRecLow +=  weatherRecord.recLo.toInt()
+        arrayOfRecLow +=  weatherRecord.recLo
     }
 
-    var numMinArray = listOfRecLow.min()
+    var numMinArray = arrayOfRecLow.min()
     for ((key, weatherRecord) in weatherDB) {
         if (weatherRecord.recLo == numMinArray) {
             println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12) )
+        }}
+}
+
+fun printRecordHighOneMonth(weatherDB: MutableMap<String, Weather>, month: Int) {
+    var arrayOfRecHiMonth = mutableListOf<Int>()
+    for ((key,weathRecord) in weatherDB){
+        if(weathRecord.month == month) {
+        arrayOfRecHiMonth += weathRecord.recHi
         }
     }
 
+    var maxNumOfRecHi = arrayOfRecHiMonth.max()
+    for ((key, weatherRecord) in weatherDB) {
+        if(weatherRecord.month == month && weatherRecord.recHi == maxNumOfRecHi) {
+            println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12))
+        }
+    }
 }
 
+fun printRecordLowOneMonth(weatherDB: MutableMap<String, Weather>, month: Int) {
+    var arrayOfRecLowMonth = mutableListOf<Int>()
+    for((key,weatherRecord) in weatherDB){
+        if(weatherRecord.month == month) {
+            arrayOfRecLowMonth += weatherRecord.recLo
+        }
+    }
+    var minNumOfRecLo = arrayOfRecLowMonth.min()
+    for((key,weatherRecord) in weatherDB) {
+        if(weatherRecord.month == month && weatherRecord.recLo == minNumOfRecLo) {
+            println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12))
+        }
+    }
+}
+
+fun printAveragePrecip(weatherDB: MutableMap<String, Weather>, month: Int) {
+    var arrayOfPrecip = mutableListOf<Double>()
+    for ((key,weatherRecord) in weatherDB) {
+        if(weatherRecord.month == month){
+            arrayOfPrecip += weatherRecord.avgPrecip
+        }
+    }
+    var addUpArray = (arrayOfPrecip.sum()).toFloat()
+    var avgPrecipForMonth = (addUpArray /arrayOfPrecip.size)
+    // I included an option of a formatted answer. I learned about this type of formatting in CIS 146
+    var roundedAvg = "%.2f".format(avgPrecipForMonth)
+
+    var userMonthChoice = ""
+
+    when(month){
+        1 -> userMonthChoice = "January"
+        2 -> userMonthChoice = "February"
+        3 -> userMonthChoice = "March"
+        4 -> userMonthChoice = "April"
+        5 -> userMonthChoice = "May"
+        6 -> userMonthChoice = "June"
+        7 -> userMonthChoice = "July"
+        8 -> userMonthChoice = "August"
+        9 -> userMonthChoice = "September"
+        10 -> userMonthChoice = "October"
+        11 -> userMonthChoice = "November"
+        12 -> userMonthChoice = "December"
+        else -> println("Error: Please enter a valid month (1-12)")
+    }
+
+    println(" ".repeat(35) + "Average Precipitation for the month of ${userMonthChoice} is: ${avgPrecipForMonth} inches. Or ${roundedAvg} inches rounded." + " ".repeat(35))
+}
 
 fun printHeader(firstLineArray: MutableList<String>) {
     return println("${firstLineArray[0]}".padStart(12) + " ${firstLineArray[1]}".padStart(12) + " ${firstLineArray[2]}".padStart(12) + " ${firstLineArray[3]}".padStart(12) + " ${firstLineArray[4]}".padStart(12) + " ${firstLineArray[5]}".padStart(12) + " ${firstLineArray[6]}".padStart(12) + " ${firstLineArray[7]}".padStart(12) + " ${firstLineArray[8]}".padStart(12) + " ${firstLineArray[9]}".padStart(12) + " ${firstLineArray[10]}".padStart(12) + " ${firstLineArray[11]}".padStart(12) +
-            "\n" + (" " + "-".repeat(11)).repeat(12)
-    )
+            "\n" + (" " + "-".repeat(11)).repeat(12))
 }
-
-// function that grabs a key for a specific month
-
-//fun getKey() {
-//
-//}
-
-
-// function that reads data from key
-
-//fun readData() {
-//
-//}
