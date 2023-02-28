@@ -18,7 +18,6 @@ fun main(){
 
 
     var lines = File(weatherDBFile).readLines()
-//    println(lines)
     var firstLine = true
 
     for (line in lines) {
@@ -34,10 +33,6 @@ fun main(){
         }
     }
 
-
-
-
-// read database file and stores into hashmap
     var userChoice = 0
     while(userChoice != 8) {
         userChoice = menu()
@@ -212,7 +207,8 @@ fun printLowestRecordTemp(weatherDB: MutableMap<String, Weather>) {
     for ((key, weatherRecord) in weatherDB) {
         if (weatherRecord.recLo == numMinArray) {
             println(" ${weatherRecord.month}".padStart(12) + " ${weatherRecord.day}".padStart(12) + " ${weatherRecord.sunrise}".padStart(12) + " ${weatherRecord.sunset}".padStart(12) + " ${weatherRecord.mean}".padStart(12) + " ${weatherRecord.avgHi}".padStart(12) + " ${weatherRecord.avgLo}".padStart(12) + " ${weatherRecord.recHi}".padStart(12) + " ${weatherRecord.recHiYr}".padStart(12) + " ${weatherRecord.recLo}".padStart(12) + " ${weatherRecord.recLoYr}".padStart(12) + " ${weatherRecord.avgPrecip}".padStart(12) )
-        }}
+        }
+    }
 }
 
 fun printRecordHighOneMonth(weatherDB: MutableMap<String, Weather>, month: Int) {
