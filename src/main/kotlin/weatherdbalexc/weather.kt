@@ -1,4 +1,4 @@
-package weatherdbKotlin
+package weatherdbalexc
 import java.io.File
 /************************************************************
  *  Name:         Alex Cruz
@@ -8,7 +8,7 @@ import java.io.File
  *  Description:
  ************************************************************/
 
-const val weatherDBFile = "src/main/kotlin/weather.db"
+const val weatherDBFile = "src/main/kotlin/weatherdbalexc/weather.db"
 data class Weather (val month : Int, val day : Int, val sunrise : String, val sunset : String, val mean : Int, val avgHi : Int, val avgLo : Int, val recHi : Int, val recHiYr : Int, val recLo : Int, val recLoYr : Int, val avgPrecip : Double)
 
 fun main(){
