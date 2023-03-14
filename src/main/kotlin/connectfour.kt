@@ -8,15 +8,34 @@
 val gameBoard = Array(8){ Array(8){"."}}
 fun main() {
     var playerWin = false
-
-    println("Player (X) is playing against the computer (O).")
+    var computerWin = false
+    println("Player (X) is playing against the computer (O)")
     do {
-        var userChoice = playerPrompt()
-        playerPiece(userChoice)
+        var userChoice = playerPromptNew("Select a column to place your piece (X): ", 1..8)
+        var playerPiece = playerPiece(userChoice)
+        playerWin = checkHorizontalWin(playerPiece,"X")
+        if (!playerWin) {
+            playerWin = checkVerticalWin(userChoice, "X")
+        }
         gameBoardPrint()
-        playerWin = checkHorizontalWin("X")
+        if(!playerWin) {
+        var computerChoice = computerRandom()
+        var computerPiece = computerPiece(computerChoice)
+        computerWin = checkHorizontalWin(computerPiece, "O")
+        if (!computerWin) {
+            computerWin = checkVerticalWin(computerChoice, "O")
+        }
+        gameBoardPrint()
+        }
 
-    } while (!playerWin )
+    } while (!playerWin && !computerWin)
+
+    if(playerWin) {
+        println("Player(X) is the winner!")
+    }
+    else if (computerWin){
+        println("Computer(O) is the winner!")
+    }
 
 
 }
@@ -31,9 +50,18 @@ fun menu() : Int {
     return readln()!!.toInt()
 }
 
-fun playerPrompt() : Int {
-    print("Select a column to place your piece (X): ")
-    return readln()!!.toInt()
+fun playerPromptNew(prompt:String, intRange : IntRange = 1..8) : Int {
+    var input : String? = ""
+    var firsTime = true
+    do {
+        if (!firsTime){
+            println("Invalid Number - must be a whole number between 1 and 8")
+        }
+        firsTime = false
+        print(prompt)
+        input = readLine()
+    } while (input.isNullOrEmpty() || input.toInt() !in intRange)
+    return input.toInt() - 1
 }
 
 fun gameBoardPrint() {
@@ -49,65 +77,52 @@ fun gameBoardPrint() {
     println()
 }
 
-fun playerPiece(col:Int) {
-    val currentCol = col - 1
+fun playerPiece(col:Int) : Int {
+    val currentCol = col
+//    val currentCol = col - 1
+    var rowSelected = 0
 
-    if (currentCol <= 7) {
+    if (currentCol <= 7 ) {
         if (gameBoard[7][currentCol] != "X" && gameBoard[7][currentCol] != "O") {
             gameBoard[7][currentCol] = "X"
+            rowSelected = 7
         } else if (gameBoard[6][currentCol] != "X" && gameBoard[6][currentCol] != "O") {
             gameBoard[6][currentCol] = "X"
+            rowSelected = 6
         } else if (gameBoard[5][currentCol] != "X" && gameBoard[5][currentCol] != "O") {
             gameBoard[5][currentCol] = "X"
+            rowSelected = 5
         } else if (gameBoard[4][currentCol] != "X" && gameBoard[4][currentCol] != "O") {
             gameBoard[4][currentCol] = "X"
+            rowSelected = 4
         } else if (gameBoard[3][currentCol] != "X" && gameBoard[3][currentCol] != "O") {
             gameBoard[3][currentCol] = "X"
+            rowSelected = 3
         } else if (gameBoard[2][currentCol] != "X" && gameBoard[2][currentCol] != "O") {
             gameBoard[2][currentCol] = "X"
+            rowSelected = 2
         } else if (gameBoard[1][currentCol] != "X" && gameBoard[1][currentCol] != "O") {
             gameBoard[1][currentCol] = "X"
+            rowSelected = 1
         } else if (gameBoard[0][currentCol] != "X" && gameBoard[0][currentCol] != "O") {
             gameBoard[0][currentCol] = "X"
+            rowSelected = 0
         }
         else {
             println("Piece is out of bounds.")
         }
     }
-    else {
-            println("Piece is out of bounds.")
-        }
+    return rowSelected
     }
 
 
-fun checkHorizontalWin(char:String) : Boolean {
+fun checkHorizontalWin(row:Int, char:String) : Boolean {
     var winCheck = false
     var charCounter = 0
     var col = 0
 
     while (col < gameBoard.size) {
-        if (gameBoard[7][col] == char) {
-            charCounter++
-        }
-        else if (gameBoard[6][col] == char) {
-            charCounter++
-        }
-        else if (gameBoard[5][col] == char) {
-            charCounter++
-        }
-        else if (gameBoard[4][col] == char) {
-            charCounter++
-        }
-        else if (gameBoard[3][col] == char) {
-            charCounter++
-        }
-        else if (gameBoard[2][col] == char) {
-            charCounter++
-        }
-        else if (gameBoard[1][col] == char) {
-            charCounter++
-        }
-        else if (gameBoard[0][col] == char) {
+        if (row <= 7 && col <= 7 && gameBoard[row][col] == char) {
             charCounter++
         }
         else {
@@ -122,38 +137,67 @@ fun checkHorizontalWin(char:String) : Boolean {
 }
 
 
-fun computerPiece(col:Int) {
-    if (col <= 8) {
-        if (gameBoard[7][col] == "." && gameBoard[7][col] != "X") {
-            gameBoard[7][col] = "O"
-        } else if (gameBoard[6][col] == "." && gameBoard[6][col] != "X") {
-            gameBoard[6][col] = "O"
-        } else if (gameBoard[5][col] == "." && gameBoard[5][col] != "X") {
-            gameBoard[5][col] = "O"
-        } else if (gameBoard[4][col] == "." && gameBoard[4][col] != "X") {
-            gameBoard[4][col] = "O"
-        } else if (gameBoard[3][col] == "." && gameBoard[3][col] != "X") {
-            gameBoard[3][col] = "O"
-        } else if (gameBoard[2][col] == "." && gameBoard[2][col] != "X") {
-            gameBoard[2][col] = "O"
-        } else if (gameBoard[1][col] == "." && gameBoard[1][col] != "X") {
-            gameBoard[1][col] = "O"
-        } else if (gameBoard[0][col] == "." && gameBoard[0][col] != "X") {
-            gameBoard[0][col] = "O"
+fun checkVerticalWin(col:Int, char: String) : Boolean {
+//    var currentCol = col - 1
+    var winCheck = false
+    var charCounter = 0
+    var row = 0
+
+    while (row < gameBoard.size) {
+        if (row <= 7 && col <= 7 && gameBoard[row][col] == char) {
+            charCounter++
+        }
+        else {
+            charCounter = 0
+        }
+        row++
+        if(charCounter >= 4) {
+            winCheck = true
         }
     }
-    else {
-        return println("Choice is out of bounds")
-    }
+    return winCheck
 }
 
-//fun checkHorizontalWin(row: Int, char: String) : Boolean {
-//    var colCounter = 0
-//    var charCounter = 0
-//    var col = 0
-//
-//
-//}
+fun computerPiece(col:Int) : Int {
+    var rowSelected = 0
+    if (col <= 8) {
+        if (gameBoard[7][col] != "O" && gameBoard[7][col] != "X") {
+            gameBoard[7][col] = "O"
+            rowSelected = 7
+        } else if (gameBoard[6][col] != "O" && gameBoard[6][col] != "X") {
+            gameBoard[6][col] = "O"
+            rowSelected = 6
+        } else if (gameBoard[5][col] != "O" && gameBoard[5][col] != "X") {
+            gameBoard[5][col] = "O"
+            rowSelected = 5
+        } else if (gameBoard[4][col] != "O" && gameBoard[4][col] != "X") {
+            gameBoard[4][col] = "O"
+            rowSelected = 4
+        } else if (gameBoard[3][col] != "O" && gameBoard[3][col] != "X") {
+            gameBoard[3][col] = "O"
+            rowSelected = 3
+        } else if (gameBoard[2][col] != "O" && gameBoard[2][col] != "X") {
+            gameBoard[2][col] = "O"
+            rowSelected = 2
+        } else if (gameBoard[1][col] != "O" && gameBoard[1][col] != "X") {
+            gameBoard[1][col] = "O"
+            rowSelected = 1
+        } else if (gameBoard[0][col] != "O" && gameBoard[0][col] != "X") {
+            gameBoard[0][col] = "O"
+            rowSelected = 0
+        }
+        else {
+            println("(O) Piece is out of bounds.")
+        }
+    }
+    return rowSelected
+}
+
+
+fun computerRandom() : Int{
+    return (0..7).random()
+}
+
 
 
 /*
@@ -168,7 +212,32 @@ fun computerPiece(col:Int) {
 0 . . . . . . .
 X . . . . . . .
 
+fun checkHorizontalWin(row:Int, char:String) : Boolean {
+    var winCheck = false
+    var charCounter = 0
+    var col = 0
 
-// need to fix player piece placement now that a space is added ** Done
+    while (col < gameBoard.size) {
+          if (gameBoard[row][col] == char) {
+            charCounter++
+          }
+//        } else if (gameBoard[6][col] == char) {
+//            charCounter++
+//        } else if (gameBoard[5][col] == char) {
+//            charCounter++
+//        } else if (gameBoard[4][col] == char) {
+//            charCounter++
+//        } else if (gameBoard[3][col] == char) {
+//            charCounter++
+//        } else if (gameBoard[2][col] == char) {
+//            charCounter++
+//        } else if (gameBoard[1][col] == char) {
+//            charCounter++
+//        } else if (gameBoard[0][col] == char) {
+//            charCounter++
+        else {
+            charCounter = 0
+        }
+        col++
 
  */
