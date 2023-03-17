@@ -1,3 +1,5 @@
+package connectfour
+
 /************************************************************
  *  Name:         Alex Cruz
  *  Date:         3/8/23
@@ -17,6 +19,9 @@ fun main() {
         if (!playerWin) {
             playerWin = checkVerticalWin(userChoice, "X")
         }
+        if (!playerWin) {
+            playerWin = checkDiagonalWin("X")
+        }
         gameBoardPrint()
         if(!playerWin) {
         var computerChoice = computerRandom()
@@ -24,6 +29,9 @@ fun main() {
         computerWin = checkHorizontalWin(computerPiece, "O")
         if (!computerWin) {
             computerWin = checkVerticalWin(computerChoice, "O")
+        }
+        if (!computerWin) {
+            computerWin = checkDiagonalWin("O")
         }
         gameBoardPrint()
         }
@@ -66,7 +74,7 @@ fun playerPromptNew(prompt:String, intRange : IntRange = 1..8) : Int {
 
 fun gameBoardPrint() {
     println("\n1 2 3 4 5 6 7 8")
-    println("-".repeat(16))
+    println("-".repeat(15))
     for(row in 0 until gameBoard.size) {
         for (col in 0 until gameBoard[row].size) {
             print(gameBoard[row][col])
@@ -136,9 +144,8 @@ fun checkHorizontalWin(row:Int, char:String) : Boolean {
     return winCheck
 }
 
-
 fun checkVerticalWin(col:Int, char: String) : Boolean {
-//    var currentCol = col - 1
+
     var winCheck = false
     var charCounter = 0
     var row = 0
@@ -193,51 +200,30 @@ fun computerPiece(col:Int) : Int {
     return rowSelected
 }
 
+fun checkDiagonalWin(char:String) : Boolean{
+    var winCheck = false
+    var charCounter = 0
+    var outerRow = 3
+    var innerCol = 0
+
+    for(i in outerRow downTo 0) {
+        for (j in innerCol until 7) {
+            if (innerCol <= 7 && gameBoard[i][innerCol] == char) {
+                charCounter++
+            } else {
+                charCounter = 0
+            }
+            innerCol++
+            if (charCounter >= 4){
+                winCheck = true
+            }
+        }
+    }
+    return winCheck
+}
+
 
 fun computerRandom() : Int{
     return (0..7).random()
 }
 
-
-
-/*
-      ****      Initial testing     *****
-1 2 3 4 5 6 7 8
-. . . . . . . .
-. . . . . . . .
-. . . . . . . .
-. . . . . . . .
-. . . . . . . .
-. . . . . . . .
-0 . . . . . . .
-X . . . . . . .
-
-fun checkHorizontalWin(row:Int, char:String) : Boolean {
-    var winCheck = false
-    var charCounter = 0
-    var col = 0
-
-    while (col < gameBoard.size) {
-          if (gameBoard[row][col] == char) {
-            charCounter++
-          }
-//        } else if (gameBoard[6][col] == char) {
-//            charCounter++
-//        } else if (gameBoard[5][col] == char) {
-//            charCounter++
-//        } else if (gameBoard[4][col] == char) {
-//            charCounter++
-//        } else if (gameBoard[3][col] == char) {
-//            charCounter++
-//        } else if (gameBoard[2][col] == char) {
-//            charCounter++
-//        } else if (gameBoard[1][col] == char) {
-//            charCounter++
-//        } else if (gameBoard[0][col] == char) {
-//            charCounter++
-        else {
-            charCounter = 0
-        }
-        col++
-
- */
