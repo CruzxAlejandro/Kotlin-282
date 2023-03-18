@@ -3,7 +3,7 @@ package connectfour
 /************************************************************
  *  Name:         Alex Cruz
  *  Date:         3/8/23
- *  Assignment:
+ *  Assignment:   Connect Four Player VS Computer
  *  Class Number: CIS 282
  *  Description:
  ************************************************************/
@@ -12,28 +12,52 @@ fun main() {
     var playerWin = false
     var computerWin = false
     println("Player (X) is playing against the computer (O)")
+
     do {
         var userChoice = playerPromptNew("Select a column to place your piece (X): ", 1..8)
         var playerPiece = playerPiece(userChoice)
-        playerWin = checkHorizontalWin(playerPiece,"X")
-        if (!playerWin) {
-            playerWin = checkVerticalWin(userChoice, "X")
+        var validPlay = false
+
+        while (!validPlay) {
+            if (playerPiece >= 0) {
+                playerWin = checkHorizontalWin(playerPiece, "X")
+                if (!playerWin) {
+                    playerWin = checkVerticalWin(userChoice, "X")
+                }
+                if (!playerWin) {
+                    playerWin = checkDiagonalWin("X")
+                }
+                gameBoardPrint()
+                validPlay = true
+            } else {
+                userChoice = playerPromptNew("Select a column to place your piece (X): ", 1..8)
+                playerPiece = playerPiece(userChoice)
+            }
         }
-        if (!playerWin) {
-            playerWin = checkDiagonalWin("X")
-        }
-        gameBoardPrint()
+
+        validPlay = false
+
         if(!playerWin) {
-        var computerChoice = computerRandom()
-        var computerPiece = computerPiece(computerChoice)
-        computerWin = checkHorizontalWin(computerPiece, "O")
-        if (!computerWin) {
-            computerWin = checkVerticalWin(computerChoice, "O")
-        }
-        if (!computerWin) {
-            computerWin = checkDiagonalWin("O")
-        }
-        gameBoardPrint()
+            var computerChoice = computerRandom()
+            var computerPiece = computerPiece(computerChoice)
+            while (!validPlay){
+                if (computerPiece >= 0){
+                    computerWin = checkHorizontalWin(computerPiece, "O")
+                    if (!computerWin){
+                        computerWin = checkVerticalWin(computerChoice, "O")
+                    }
+                    if (!computerWin){
+                        computerWin = checkDiagonalWin("O")
+                    }
+                    println("Computer(O) selected column: ${computerChoice + 1}")
+                    gameBoardPrint()
+                    validPlay = true
+                }
+                else {
+                    computerChoice = computerRandom()
+                    computerPiece = computerPiece(computerChoice)
+                }
+            }
         }
 
     } while (!playerWin && !computerWin)
@@ -44,18 +68,6 @@ fun main() {
     else if (computerWin){
         println("Computer(O) is the winner!")
     }
-
-
-}
-
-fun menu() : Int {
-    println("1. Player vs. Player")
-//    println("2. Player vs. Computer")
-//    println("3. Computer vs. Computer")
-    println("2. Quit")
-    print("Please enter a selection: ")
-
-    return readln()!!.toInt()
 }
 
 fun playerPromptNew(prompt:String, intRange : IntRange = 1..8) : Int {
@@ -87,7 +99,6 @@ fun gameBoardPrint() {
 
 fun playerPiece(col:Int) : Int {
     val currentCol = col
-//    val currentCol = col - 1
     var rowSelected = 0
 
     if (currentCol <= 7 ) {
@@ -117,12 +128,12 @@ fun playerPiece(col:Int) : Int {
             rowSelected = 0
         }
         else {
-            println("Piece is out of bounds.")
+            println("Player(X) piece is out of bounds.")
+            rowSelected = -1
         }
     }
     return rowSelected
     }
-
 
 fun checkHorizontalWin(row:Int, char:String) : Boolean {
     var winCheck = false
@@ -167,7 +178,8 @@ fun checkVerticalWin(col:Int, char: String) : Boolean {
 
 fun computerPiece(col:Int) : Int {
     var rowSelected = 0
-    if (col <= 8) {
+
+    if (col <= 7) {
         if (gameBoard[7][col] != "O" && gameBoard[7][col] != "X") {
             gameBoard[7][col] = "O"
             rowSelected = 7
@@ -194,34 +206,97 @@ fun computerPiece(col:Int) : Int {
             rowSelected = 0
         }
         else {
-            println("(O) Piece is out of bounds.")
+            println("Computer(O) piece is out of bounds.")
+            println("Computer is selecting a different choice.")
+            rowSelected = -1
         }
     }
     return rowSelected
 }
 
-fun checkDiagonalWin(char:String) : Boolean{
+fun checkDiagonalWin(char:String) : Boolean {
+
     var winCheck = false
     var charCounter = 0
-    var outerRow = 3
-    var innerCol = 0
+    var col = 0
+    var rowIndexNe = 3
 
-    for(i in outerRow downTo 0) {
-        for (j in innerCol until 7) {
-            if (innerCol <= 7 && gameBoard[i][innerCol] == char) {
+    // Diagonal checks going North East
+
+    for (outerRow in 7 downTo 3) {
+        for (row in rowIndexNe downTo 0) {
+            if (row <= 7 && col <= 7 && gameBoard[row][col] == char) {
                 charCounter++
             } else {
                 charCounter = 0
             }
-            innerCol++
-            if (charCounter >= 4){
+            col++
+            if (charCounter >= 4) {
+                winCheck = true
+            }
+        }
+        col = 0
+        if (rowIndexNe < 7){
+            rowIndexNe++
+        }
+    }
+
+    for( colStart in 1..4) {
+        var currentCol = colStart
+        for( row in 7 downTo colStart){
+            if (gameBoard[row][currentCol] == char) {
+                charCounter++
+            } else {
+                charCounter = 0
+            }
+            currentCol++
+            if (charCounter >= 4) {
                 winCheck = true
             }
         }
     }
+
+    /// Diagonal checks going North West
+
+    var rowIndexNW = 7
+    var rowEnd = 1
+    var colNe = 7
+
+    for (outerRow in 7 downTo 3) {
+        for (row in rowIndexNW downTo 0) {
+            if (row <= 7 && gameBoard[row][colNe] == char) {
+                charCounter++
+            } else {
+                charCounter = 0
+            }
+            colNe--
+            if (charCounter >= 4){
+                winCheck = true
+            }
+        }
+        colNe = 7
+        if (rowIndexNW > 0) {
+            rowIndexNW--
+        }
+    }
+
+    for( colStart in 6 downTo 3) {
+        var currentCol = colStart
+        for( row  in  7 downTo rowEnd){
+            if (gameBoard[row][currentCol] == char) {
+                charCounter++
+            } else {
+                charCounter = 0
+            }
+            currentCol--
+            if (charCounter >= 4){
+                winCheck = true
+            }
+        }
+        rowEnd++
+    }
     return winCheck
 }
-
 
 fun computerRandom() : Int{
     return (0..7).random()

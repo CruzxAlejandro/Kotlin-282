@@ -1,9 +1,9 @@
-package connectfourplayervplayer
+package connectfour_pvp
 
 /************************************************************
  *  Name:         Alex Cruz
  *  Date:         3/14/23
- *  Assignment:
+ *  Assignment:   Connect Four Player VS Player
  *  Class Number: CIS 282
  *  Description:
  ************************************************************/
@@ -68,16 +68,6 @@ fun main() {
         println("Player(Y) is the winner!")
     }
 
-}
-
-fun menu() : Int {
-    println("1. Player vs. Player")
-//    println("2. Player vs. Computer")
-//    println("3. Computer vs. Computer")
-    println("2. Quit")
-    print("Please enter a selection: ")
-
-    return readln()!!.toInt()
 }
 
 fun playerPromptNew(prompt:String, intRange : IntRange = 1..8) : Int {
